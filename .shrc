@@ -1,0 +1,78 @@
+##############################
+# Common Shell Configuration #
+##############################
+# `~/.shrc` is a common shell configuration for the Bourne shell (`sh(1)`) and
+# Bourne compatible shells (`bash(1)`, `ksh(1)`, `ash(1)`, ...).
+#
+# This file should be executed first by the shell.
+
+# umask
+# =====
+# Default `umask` is set to `0027`, i.e., `0750` (`drwxr-x---`) permissions for
+# directories and `0640` (`-rw-r-----`) permissions for files.
+umask 0027
+
+# less
+# ====
+# `less` options are also taken from the environment variable `LESS` to avoid
+# typing `less -options ...` each time `less` is invoked.
+#
+# -Q or --QUIET or --SILENT
+# Causes totally "quiet" operation: the terminal bell is never rung.
+# If the terminal has a "visual bell", it is used in all cases where the
+# terminal bell would have been rung.
+#
+# -R or --RAW-CONTROL-CHARS
+# Like `-r`, but only ANSI "color" escape sequences are output in "raw" form.
+# Unlike `-r`, the screen appearance is maintained correctly in most cases.
+# ANSI "color" escape sequences are sequences of the form:
+#         ESC [ ... m
+# where  the "..."  is zero or more color specification characters For the
+# purpose of keeping track of screen appearance, ANSI color escape sequences
+# are assumed to not move the cursor. You can make less think that characters
+# other than "m" can end ANSI color escape sequences by setting the
+# environment variable `LESSANSIENDCHARS` to the list of characters which can
+# end a color escape sequence. And you can make less think that characters other
+# than the standard ones may appear between the ESC and the m by setting the
+# environment variable `LESSANSIMIDCHARS` to the list of characters which can
+# appear.
+export LESS="$LESS --QUIET --RAW-CONTROL-CHARS"
+
+# PATH
+# ====
+# Note: the tilde (`~`) is part of a shell expansion. The `$HOME` variable is
+#       exportable and can be used independent of a specific shell.
+
+# Include user's private `bin` to `PATH` if it exists.
+if [ -d "${HOME}/bin" ]
+then
+    PATH="${HOME}/bin:$PATH"
+fi
+
+# Include user's private `.local/bin` to `PATH` if it exists.
+if [ -d "${HOME}/.local/bin" ]
+then
+    PATH="${HOME}/.local/bin:$PATH"
+fi
+
+# Configuration for interactive shell
+# ===================================
+# If not running interactively, don't do anything.
+# Note: `$-` prints the current set of options in the current shell.
+#       `i` is in the set if current shell is interactive.
+case $- in
+    *i*) ;;
+    *) return;;
+esac
+
+# Make `less` more friendly for non-text input files (see `lesspipe(1))`.
+if command -v lesspipe > /dev/null
+then
+    eval "$(SHELL=/bin/sh lesspipe)"
+fi
+
+# Define some aliases.
+if [ -f "${HOME}/.sh_aliases" ]
+then
+    . "$HOME/.sh_aliases"
+fi
