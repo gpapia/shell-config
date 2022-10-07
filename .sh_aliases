@@ -1,11 +1,13 @@
 ##################################
 # Common Shell Alias Definitions #
 ##################################
+#
 # `~./sh_aliases` defines usefull aliases.
 
 # Alias
 # =====
-# Enable color support of ls and also add handy aliases
+
+# Enable color support of `ls` and also add handy aliases.
 if command -v dircolors > /dev/null
 then
     if [ -f "${HOME}/.dircolors" ]
@@ -38,7 +40,6 @@ fi
 
 # Functions
 # =========
-# Functions are sorted alphabetically.
 
 # Remove files starting with `#`; print nothing if no file found.
 function rmh() {
@@ -63,8 +64,9 @@ function rmtt() {
 }
 
 # Print in html format the textual diff between two files.
-# $1 and $2 are the text files (mandatory).
-# $3 are the output html filename (optional).
+# Arguments:
+#     $1 and $2 are the text files (mandatory).
+#     $3 are the output html filename (optional).
 function vimdiff2html() {
     # You must use double quote otherwise it doesn't work as expected.
     vimdiff "${1}" "${2}" -c TOhtml -c "w! ${3}" -c "qa!"

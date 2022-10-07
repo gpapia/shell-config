@@ -1,7 +1,7 @@
 ######################
 # Bash Configuration #
 ######################
-
+#
 # `~/.bashrc` is the configuration file specific to `bash`.
 
 # Source Common Shell Configuration
