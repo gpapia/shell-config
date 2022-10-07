@@ -71,9 +71,3 @@ if command -v lesspipe > /dev/null
 then
     eval "$(SHELL=/bin/sh lesspipe)"
 fi
-
-# Define some aliases.
-if [ -f "${HOME}/.sh_aliases" ]
-then
-    . "$HOME/.sh_aliases"
-fi
