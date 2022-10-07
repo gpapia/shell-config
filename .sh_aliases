@@ -7,7 +7,9 @@
 # Alias
 # =====
 
-# Enable color support of `ls` and also add handy aliases.
+# Colors
+# ------
+# Enable color support of `ls`.
 if command -v dircolors > /dev/null
 then
     if [ -f "${HOME}/.dircolors" ]
@@ -16,18 +18,33 @@ then
     else
         eval "$(dircolors -b)"
     fi
-
-    alias egrep='egrep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias grep='grep --color=auto'
-    alias ls='ls --color=auto'
+    ls='ls --color=auto'
 fi
+
+# Enable color support of `grep`.
+# The `GREP_COLORS` variable specifies the colors and other attributes used to
+# highlight various parts of the output. Its value is a colon-separated list of
+# capabilities that defaults to
+# `ms=01;31:mc=01;31:sl=:cx=:fn=35:ln=32:bn=32:se=36` with the `rv` and `ne`
+# boolean capabilities omitted  (i.e., false). See `man grep(1)` for supported
+# capabilities.
+#
+# Set green color (`31`) for matching non-empty text in a selected line instead
+# of red (`32`) and red instead of green for line numbers and byte offsets
+# prefixing any content line. All other default values are kept.
+export GREP_COLORS='ms=01;32:mc=01;32:ln=31:bn=31'
+alias egrep='egrep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias grep='grep --color=auto'
+
+# Misc
+# ----
 
 alias ciao='exit'
 alias lrt='ls -thlr'
 alias q='emacs'
 alias rmspace='sed "s/[[:blank:]]*$//"'
-alias s='q'
+alias s='emacs'
 
 # Use `neovim` instead of `vim`.
 if command -v nvim > /dev/null
