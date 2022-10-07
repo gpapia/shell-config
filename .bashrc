@@ -115,17 +115,22 @@ HISTIGNORE="cd:cd -:ciao:exit:history:history :lrt:ls:pwd:rmh:rmspace:rmtt"
 # `HISTFILE` variable when the shell exits, rather than overwriting the file.
 shopt -s histappend
 
+# Globstar
+# ========
+# The `*` matches any string, including the null string. When the `globstar`
+# shell option is enabled, and `*` is used in a pathname expansion context,
+# two adjacent `*`s used as a single pattern will match all files and zero
+# or more directories and subdirectories. If followed by a `/`, two adjacent
+# `*`s will match only directories and subdirectories.
+#
+# Set the pattern `**` used in a pathname expansion context that will match all
+# files and zero or more directories and subdirectories. If the pattern is
+# followed by a `/`, only directories and subdirectories match.
+shopt -s globstar
+
 # TODO
 # ====
 # Old configuration coming from Ubuntu install.
-
-# check the window size after each command and, if necessary,
-# update the values of LINES and COLUMNS.
-shopt -s checkwinsize
-
-# If set, the pattern "**" used in a pathname expansion context will
-# match all files and zero or more directories and subdirectories.
-#shopt -s globstar
 
 # set variable identifying the chroot you work in (used in the prompt below)
 if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
