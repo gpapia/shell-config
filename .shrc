@@ -82,6 +82,7 @@ fi
 if [ -f "${HOME}/liquidprompt/liquidprompt" ]
 then
     source "${HOME}/liquidprompt/liquidprompt"
+    lp_theme powerline_full
 else
     PS1="[\w]\n\u@\h]\$ "
 fi
