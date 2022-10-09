@@ -71,3 +71,17 @@ if command -v lesspipe > /dev/null
 then
     eval "$(SHELL=/bin/sh lesspipe)"
 fi
+
+# Prompt
+# ------
+# Liquidprompt is an adaptive prompt for Bash & Zsh that gives you a nicely
+# displayed prompt with useful information when you need it. It does this with
+# a powerful theming engine and a large array of data sources.
+# See the documentation at:
+# https://liquidprompt.readthedocs.io/en/stable/index.html
+if [ -f "${HOME}/liquidprompt/liquidprompt" ]
+then
+    source "${HOME}/liquidprompt/liquidprompt"
+else
+    PS1="[\w]\n\u@\h]\$ "
+fi
