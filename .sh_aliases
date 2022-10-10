@@ -55,6 +55,13 @@ then
     alias vimdiff='nvim -d'
 fi
 
+# Conda
+# -----
+
+alias env-recreate='/usr/local/bin/conda-recreate'
+alias env-activate='source activate $(basename $(pwd))'
+alias env-deactivate='conda deactivate'
+
 # Functions
 # =========
 
