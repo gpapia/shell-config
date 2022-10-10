@@ -47,13 +47,19 @@ export LESS="$LESS --QUIET --RAW-CONTROL-CHARS"
 # Include user's private `bin` to `PATH` if it exists.
 if [ -d "${HOME}/bin" ]
 then
-    PATH="${HOME}/bin:$PATH"
+    PATH="${HOME}/bin:${PATH}"
 fi
 
 # Include user's private `.local/bin` to `PATH` if it exists.
 if [ -d "${HOME}/.local/bin" ]
 then
-    PATH="${HOME}/.local/bin:$PATH"
+    PATH="${HOME}/.local/bin:${PATH}"
+fi
+
+# Include user's private `.local/share` to `PATH` if it exists.
+if [ -d "${HOME}/.local/share" ]
+then
+    PATH="${HOME}/.local/share:${PATH}"
 fi
 
 # Add this for anaconda install.
