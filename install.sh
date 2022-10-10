@@ -11,10 +11,10 @@ else
 fi
 
 for file in ${files}; do
-    cp -i "${file}" "${HOME}"
+    cp --backup=t "${file}" "${HOME}"
 done
 
 if [ -f "${HOME}/liquidprompt/liquidprompt" ]
 then
-     cp -i ./.liquidpromptrc "${HOME}"
+    cp --backup=t ./.liquidpromptrc "${HOME}"
 fi
