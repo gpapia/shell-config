@@ -92,7 +92,7 @@ HISTCONTROL=ignoreboth
 # `0`, commands are not saved in the history list. Numeric values less than zero
 # result in every command being saved on the history list (there is no limit).
 # The shell sets the default value to 500 after reading any startup files.
-HISTSIZE=1000
+HISTSIZE=100000
 
 # HISTFILESIZE
 # The maximum number of lines contained in the history file. When this variable
@@ -102,7 +102,7 @@ HISTSIZE=1000
 # If the value is 0, the history file is truncated to zero size. Non-numeric
 # values and numeric values less than zero inhibit truncation. The shell sets
 # the default value to the value of `HISTSIZE` after reading any startup files.
-HISTFILESIZE=100000
+HISTFILESIZE=20000000
 
 # HISTIGNORE
 # A colon-separated list of patterns used to decide which command lines should
