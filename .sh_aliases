@@ -58,6 +58,18 @@ fi
 # Functions
 # =========
 
+# Add this for anaconda install.
+if [ -d "${HOME}/.local/share/JetBrains/Toolbox/apps/PyCharm-C/" ]
+then
+    charm() {
+        PYCHARM=$(
+            find "${HOME}/.local/share/JetBrains/Toolbox/apps/PyCharm-C/" \
+            -name pycharm.sh | sort | tail -n 1
+        )
+        ${PYCHARM} ${@}
+    }
+fi
+
 # Remove files starting with `#`; print nothing if no file found.
 function rmh() {
     for f in \#* .\#*

@@ -56,6 +56,12 @@ then
     PATH="${HOME}/.local/bin:$PATH"
 fi
 
+# Add this for anaconda install.
+if [ -d /opt/conda/bin ]
+then
+    PATH="${PATH}:/opt/conda/bin"
+fi
+
 # Configuration for interactive shell
 # ===================================
 # If not running interactively, don't do anything.
