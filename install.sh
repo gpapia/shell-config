@@ -10,11 +10,15 @@ else
     echo "Install only common shell files" > /dev/stderr
 fi
 
-for file in ${files}; do
-    cp --backup=t "${file}" "${HOME}"
-done
-
 if [ -f "${HOME}/liquidprompt/liquidprompt" ]
 then
-    cp --backup=t ./.liquidpromptrc "${HOME}"
+    files="${files} .liquidpromptrc"
 fi
+
+for file in ${files}; do
+    diff -s "${HOME}/${file}" "${file}"
+    if [ $? -eq 1 ]
+    then
+        cp --backup=t -i "${file}" "${HOME}"
+    fi
+done
