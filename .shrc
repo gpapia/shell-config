@@ -62,7 +62,9 @@ then
     PATH="${HOME}/.local/share:${PATH}"
 fi
 
-# Add this for anaconda install.
+# Include conda to `PATH` if it exists.
+# Conda path should be the last in line to make sure default python does not
+# come from conda.
 if [ -d /opt/conda/bin ]
 then
     PATH="${PATH}:/opt/conda/bin"
