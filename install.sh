@@ -15,7 +15,8 @@ then
     files="${files} .liquidpromptrc"
 fi
 
-for file in ${files}; do
+for file in ${files}
+do
     diff -s "${HOME}/${file}" "${file}"
     if [ $? -eq 1 ]
     then
