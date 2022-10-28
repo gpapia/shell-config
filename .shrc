@@ -96,7 +96,9 @@ fi
 if [ -f "${HOME}/liquidprompt/liquidprompt" ]
 then
     source "${HOME}/liquidprompt/liquidprompt"
-    lp_theme powerline_full
+    # `powerline` themes are charged but not used by default.
+    # lp_theme powerline
+    # lp_theme powerline_full
 else
     PS1="[\w]\n\u@\h]\$ "
 fi
