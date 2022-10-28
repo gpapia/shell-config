@@ -15,6 +15,11 @@ source ~/liquidprompt/themes/powerline/powerline.theme
 # BEHAVIOUR #
 #############
 
+# String added directly before LP_MARK_DEFAULT, after all other parts of the
+# prompt. Can be used to tag the prompt in a way that is less intrusive than
+# LP_PS1_POSTFIX, or add a newline before the prompt mark.
+LP_MARK_PREFIX='\n'
+
 # Display the battery level in more urgent color when the level is below this threshold.
 # Recommended value is 75
 LP_BATTERY_THRESHOLD=75
@@ -33,7 +38,7 @@ LP_TEMP_THRESHOLD=60
 # Use the shorten path feature if the path is too long to fit in the prompt
 # line.
 # Recommended value is 1
-LP_ENABLE_SHORTEN_PATH=1
+LP_ENABLE_SHORTEN_PATH=0
 
 # The maximum percentage of the screen width used to display the path before
 # removing the center portion of the path and replacing with '...'.
