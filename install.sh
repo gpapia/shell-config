@@ -17,9 +17,14 @@ fi
 
 for file in ${files}
 do
-    diff -s "${HOME}/${file}" "${file}"
-    if [ $? -eq 1 ]
+    if [ -f "${HOME}/${file}" ]
     then
-        cp --backup=t -i "${file}" "${HOME}"
+        diff -s "${HOME}/${file}" "${file}"
+        if [ $? -eq 1 ]
+        then
+            cp --backup=t -i "${file}" "${HOME}"
+        fi
+    else
+        cp "${file}" "${HOME}"
     fi
 done
