@@ -102,3 +102,10 @@ then
 else
     PS1="[\w]\n\u@\h]\$ "
 fi
+
+# Z: Jump Around
+# https://github.com/rupa/z
+if [ -f "${HOME}/z/z.sh" ]
+then
+    source "${HOME}/z/z.sh"
+fi
