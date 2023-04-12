@@ -2,7 +2,7 @@
 # Common Shell Alias Definitions #
 ##################################
 #
-# `~./sh_aliases` defines usefull aliases.
+# `~./sh_aliases` defines usefully aliases.
 
 # Alias
 # =====
@@ -58,8 +58,8 @@ fi
 # Conda
 # -----
 
-alias env-recreate='/usr/local/bin/conda-recreate'
-alias env-activate='source activate $(basename $(pwd))'
+alias env-recreate='/opt/conda/condabin/conda recreate'
+alias env-activate='conda activate $(basename $(pwd))'
 alias env-deactivate='conda deactivate'
 
 # Functions
@@ -71,7 +71,7 @@ then
     charm() {
         PYCHARM=$(
             find "${HOME}/.local/share/JetBrains/Toolbox/apps/PyCharm-C/" \
-            -name pycharm.sh | sort | tail -n 1
+              -name pycharm.sh | sort | tail -n 1
         )
         ${PYCHARM} ${@}
     }
@@ -89,7 +89,11 @@ function rmh() {
 }
 
 # Remove files ending with `~`; print nothing if no file found.
-function rmtt() {
+if which rmt > /dev/null
+then
+    alias rmtt=$(which rmt)
+fi
+function rmt() {
     for f in *~ .*~
     do
         if [ -f "${f}" ]
@@ -97,6 +101,10 @@ function rmtt() {
             rm "${f}"
         fi
     done
+    if which rmt > /dev/null
+    then
+        echo "For $(which rmt) see 'rmtt' alias."
+    fi
 }
 
 # Print in html format the textual diff between two files.

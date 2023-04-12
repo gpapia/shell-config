@@ -1,11 +1,9 @@
-##############################
-# Common Shell Configuration #
-##############################
+####################################
+# Common Borne Shell Configuration #
+####################################
 #
-# `~/.shrc` is a common shell configuration for the Bourne shell (`sh(1)`) and
-# Bourne compatible shells (`bash(1)`, `ksh(1)`, `ash(1)`, ...).
-#
-# This file should be executed first by the shell.
+# `~/.shrc` is a common Borne shell configuration for the Bourne shell
+# (`sh(1)`) and Bourne compatible shells (`bash(1)`, `ksh(1)`, `ash(1)`, ...).
 
 # umask
 # =====
@@ -13,17 +11,93 @@
 # directories and `0640` (`-rw-r-----`) permissions for files.
 umask 0027
 
+# string_contain
+# ==============
+# This function returns '0' if ${1} is inside ${2}, '1' otherwise.
+# Source: https://stackoverflow.com/a/20460402
+string_contain() {
+  [ -z "$1" ] || { [ -z "${2##*$1*}" ] && [ -n "$2" ];};
+}
+
+# PATH
+# ====
+# Include kafka to `PATH` if it exists and it's not already there.
+if [ -d /opt/kafka/bin ] && ! string_contain ":/opt/kafka/bin:" ":${PATH}:"
+then
+    PATH="/opt/kafka/bin:${PATH}"
+fi
+
+# Include user's private `bin` to `PATH` if it exists and it's not already there.
+if [ -d "${HOME}/bin" ] && ! string_contain ":${HOME}/bin:" ":${PATH}:"
+then
+    PATH="${HOME}/bin:${PATH}"
+fi
+
+# Include user's private `.local/bin` to `PATH` if it exists and it's not already there.
+if [ -d "${HOME}/.local/bin" ] && ! string_contain ":${HOME}/.local/bin:" ":${PATH}:"
+then
+    PATH="${HOME}/.local/bin:${PATH}"
+fi
+
+# Include user's private `.local/share` to `PATH` if it exists and it's not already there.
+if [ -d "${HOME}/.local/share" ] && ! string_contain ":${HOME}/.local/share:" ":${PATH}:"
+then
+    PATH="${HOME}/.local/share:${PATH}"
+fi
+
+# Include conda to `PATH` if it exists and it's not already there.
+# Conda path should be the last in line to make sure default python3 does not
+# come from conda.
+if [ -d /opt/conda/bin ] && ! string_contain ":/opt/conda/bin:" ":${PATH}:"
+then
+    PATH="${PATH}:/opt/conda/bin"
+fi
+
+# *********************************************
+# STOP here if not running an interactive shell
+# *********************************************
+# Note: `$-` prints the current set of options in the current shell.
+#       `i` is in the set if current shell is interactive.
+case $- in
+    *i*) ;;
+    *) return;;
+esac
+
+# Prompt
+# ------
+# Liquid Prompt gives you a carefully designed prompt with useful information.
+# It shows you _what_ you need _when_ you need it. You will notice what changes
+# when it changes, saving time and frustration. You can even use it with your
+# favorite shell -- Bash or zsh.
+# See the documentation at:
+# https://liquidprompt.readthedocs.io/en/stable/index.html
+DEFAULT_PS1="[\w]\n\u@\h]\$ "
+if [ -f "${HOME}/liquidprompt/liquidprompt" ]
+then
+    if [ -r "${HOME}/liquidprompt/liquidprompt" ]
+    then
+        . "${HOME}/liquidprompt/liquidprompt"
+        # Uncomment to charge `powerline` theme.
+        # lp_theme powerline
+        # lp_theme powerline_full
+    else
+        PS1="${DEFAULT_PS1}"
+    fi
+else
+    PS1="${DEFAULT_PS1}"
+fi
+
 # less
 # ====
 # `less` options are also taken from the environment variable `LESS` to avoid
 # typing `less -options ...` each time `less` is invoked.
 #
-# -Q or --QUIET or --SILENT
+# `-Q` or `--QUIET` or `--SILENT`
 # Causes totally "quiet" operation: the terminal bell is never rung.
 # If the terminal has a "visual bell", it is used in all cases where the
 # terminal bell would have been rung.
 #
-# -R or --RAW-CONTROL-CHARS
+# `-R` or `--RAW-CONTROL-CHARS`
 # Like `-r`, but only ANSI "color" escape sequences are output in "raw" form.
 # Unlike `-r`, the screen appearance is maintained correctly in most cases.
 # ANSI "color" escape sequences are sequences of the form:
@@ -37,48 +111,7 @@ umask 0027
 # than the standard ones may appear between the ESC and the m by setting the
 # environment variable `LESSANSIMIDCHARS` to the list of characters which can
 # appear.
-export LESS="$LESS --QUIET --RAW-CONTROL-CHARS"
-
-# PATH
-# ====
-# Note: the tilde (`~`) is part of a shell expansion. The `$HOME` variable is
-#       exportable and can be used independent of a specific shell.
-
-# Include user's private `bin` to `PATH` if it exists.
-if [ -d "${HOME}/bin" ]
-then
-    PATH="${HOME}/bin:${PATH}"
-fi
-
-# Include user's private `.local/bin` to `PATH` if it exists.
-if [ -d "${HOME}/.local/bin" ]
-then
-    PATH="${HOME}/.local/bin:${PATH}"
-fi
-
-# Include user's private `.local/share` to `PATH` if it exists.
-if [ -d "${HOME}/.local/share" ]
-then
-    PATH="${HOME}/.local/share:${PATH}"
-fi
-
-# Include conda to `PATH` if it exists.
-# Conda path should be the last in line to make sure default python does not
-# come from conda.
-if [ -d /opt/conda/bin ]
-then
-    PATH="${PATH}:/opt/conda/bin"
-fi
-
-# Configuration for interactive shell
-# ===================================
-# If not running interactively, don't do anything.
-# Note: `$-` prints the current set of options in the current shell.
-#       `i` is in the set if current shell is interactive.
-case $- in
-    *i*) ;;
-    *) return;;
-esac
+export LESS="${LESS} --QUIET --RAW-CONTROL-CHARS"
 
 # Make `less` more friendly for non-text input files (see `lesspipe(1))`.
 if command -v lesspipe > /dev/null
@@ -86,26 +119,6 @@ then
     eval "$(SHELL=/bin/sh lesspipe)"
 fi
 
-# Prompt
-# ------
-# Liquidprompt is an adaptive prompt for Bash & Zsh that gives you a nicely
-# displayed prompt with useful information when you need it. It does this with
-# a powerful theming engine and a large array of data sources.
-# See the documentation at:
-# https://liquidprompt.readthedocs.io/en/stable/index.html
-if [ -f "${HOME}/liquidprompt/liquidprompt" ]
-then
-    source "${HOME}/liquidprompt/liquidprompt"
-    # `powerline` themes are charged but not used by default.
-    # lp_theme powerline
-    # lp_theme powerline_full
-else
-    PS1="[\w]\n\u@\h]\$ "
-fi
-
 # Z: Jump Around
 # https://github.com/rupa/z
-if [ -f "${HOME}/z/z.sh" ]
-then
-    source "${HOME}/z/z.sh"
-fi
+test -f "${HOME}/z/z.sh" -a -r "${HOME}/z/z.sh" && . "${HOME}/z/z.sh"

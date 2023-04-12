@@ -2,10 +2,10 @@
 # Bash Shell Alias Definitions #
 ################################
 #
-# `~./bash_aliases` defines usefull aliases for `bash`.
+# `~./bash_aliases` defines usefully aliases for `bash`.
 
-# Source common aliases.
+# Source common Bourne shell aliases.
 if [ -f "${HOME}/.sh_aliases" ]
 then
-    . "$HOME/.sh_aliases"
+    test -r "${HOME}/.sh_aliases" && . "${HOME}/.sh_aliases"
 fi

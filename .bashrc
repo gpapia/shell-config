@@ -4,20 +4,14 @@
 #
 # `~/.bashrc` is the configuration file specific to `bash`.
 
-# Source Common Shell Configuration
-# =================================
+# Source Common Bourne Shell Configuration
+# ========================================
 # `~/.shrc` file should be executed first by the shell.
-#
-# Note: the tilde (`~`) is part of a shell expansion. The `$HOME` variable is
-#       exportable and can be used independent of a specific shell.
-if [ -f "${HOME}/.shrc" ]
-then
-    . "${HOME}/.shrc"
-fi
+test -f "${HOME}/.shrc" -a -r "${HOME}/.shrc" && . "${HOME}/.shrc"
 
-# Configuration for interactive shell
-# ===================================
-# If not running interactively, don't do anything.
+# *********************************************
+# STOP here if not running an interactive shell
+# *********************************************
 # Note: `$-` prints the current set of options in the current shell.
 #       `i` is in the set if current shell is interactive.
 case $- in
@@ -25,12 +19,28 @@ case $- in
     *) return;;
 esac
 
-# Alias
+# Conda
 # =====
+# The content below was copied & adapted from the output of
+# `conda init --dry-run --verbose bash`.
+if command -v conda > /dev/null
+then
+    __conda_setup="$('/opt/conda/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+    # Do not activate conda's venv 'base' by default.
+    to_remove="conda activate base"
+    __conda_setup="${__conda_setup%${to_remove}}"
+    if [ $? -eq 0 ]; then
+        eval "$__conda_setup"
+    fi
+    unset __conda_setup
+fi
+
+# Aliases
+# =======
 # Define some aliases.
 if [ -f "${HOME}/.bash_aliases" ]
 then
-    . "$HOME/.bash_aliases"
+    test -r "${HOME}/.bash_aliases" && . "${HOME}/.bash_aliases"
 fi
 
 # History
@@ -135,6 +145,38 @@ shopt -s histappend
 # followed by a `/`, only directories and subdirectories match.
 shopt -s globstar
 
+# Checkwinsize
+# ============
+# If set, `bash` checks the window size after each external (non-builtin)
+# command and, if necessary, updates the values of `LINES` and `COLUMNS`. This
+# option is enabled by default, but just be sure.
+#
+# COLUMNS
+# Used by the `select` compound command to determine the terminal width when
+# printing selection lists. Automatically set if the `checkwinsize` option is
+# enabled or in an interactive shell upon receipt of a `SIGWINCH`.
+#
+# LINES
+# Used by the `select` compound command to determine the column length for
+# printing selection lists. Automatically set if the `checkwinsize` option is
+# enabled or in an interactive shell upon receipt of a `SIGWINCH`.
+
+shopt -s checkwinsize
+
+# Bash Completion
+# ===============
+# Don't use `bash_completion` if `bash` is run in posix mode (why?).
+if ! shopt -oq posix
+then
+    if [ -f /usr/share/bash-completion/bash_completion ] && [ -r /usr/share/bash-completion/bash_completion ]
+    then
+      . /usr/share/bash-completion/bash_completion
+    elif [ -f /etc/bash_completion ] && [ -r /etc/bash_completion ]
+    then
+      . /etc/bash_completion
+    fi
+fi
+
 # TODO
 # ====
 # Old configuration coming from Ubuntu install.
@@ -145,14 +187,3 @@ shopt -s globstar
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
-
-# enable programmable completion features (you don't need to enable
-# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
-# sources /etc/bash.bashrc).
-if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-  fi
-fi
