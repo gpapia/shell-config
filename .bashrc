@@ -25,14 +25,24 @@ esac
 # `conda init --dry-run --verbose bash`.
 if command -v conda > /dev/null
 then
-    __conda_setup="$('/opt/conda/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
-    # Do not activate conda's venv 'base' by default.
-    to_remove="conda activate base"
-    __conda_setup="${__conda_setup%${to_remove}}"
+    __conda_setup="$('/opt/conda/condabin/conda' 'shell.bash' 'hook' 2> /dev/null)"
     if [ $? -eq 0 ]; then
         eval "$__conda_setup"
+        # Deactivate the base environment that conda installed by default.
+        # This gives priority to system Python tools/libraries unless a conda
+        # environment is explicitly activated.
+        conda deactivate
     fi
     unset __conda_setup
+
+    # Make sure conda environment gets automatically activated in Pycharm and not in Windows terminal.
+    if [ -z ${WT_SESSION+x} ] && [ -f environment.yml ] && conda env list | grep -qE "^$(basename $PWD) "
+    then
+        # if not in windows terminal AND
+        # environment.yml exists AND
+        # corresponding conda environment exists
+        conda activate $(basename $PWD)
+    fi
 fi
 
 # Aliases
@@ -175,6 +185,13 @@ then
     then
       . /etc/bash_completion
     fi
+fi
+
+# pipx completion
+# ===============
+if command -v pipx > /dev/null
+then
+    eval "$(register-python-argcomplete3 pipx)"
 fi
 
 # TODO

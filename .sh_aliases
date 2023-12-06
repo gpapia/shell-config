@@ -58,24 +58,125 @@ fi
 # Conda
 # -----
 
-alias env-recreate='/opt/conda/condabin/conda recreate'
-alias env-activate='conda activate $(basename $(pwd))'
+alias env-recreate='lbe-conda-recreate'
+alias env-activate='conda activate $(basename ${PWD})'
 alias env-deactivate='conda deactivate'
+alias lbe-conda-activate='conda activate $(basename ${PWD})'
+alias lbe-conda-deactivate='conda deactivate'
+
+# AWS
+# ---
+
+# INT
+alias lbe-connect-mgr1-int='aws --profile OLAFINT \
+    ssm start-session --target i-09d4cb2602500f8a4
+'
+alias lbe-connect-mgr2-int='aws --profile OLAFINT \
+    ssm start-session --target i-04b2e8fac8db4213c
+'
+alias lbe-connect-mgr3-int='aws --profile OLAFINT \
+    ssm start-session --target i-098c699fa21f527d8
+'
+alias lbe-connect-wrk1-int='aws --profile OLAFINT \
+    ssm start-session --target i-024d21c445ba9bc94
+'
+alias lbe-connect-wrk2-int='aws --profile OLAFINT \
+    ssm start-session --target i-08344127de5626622
+'
+alias lbe-connect-wrk3-int='aws --profile OLAFINT \
+    ssm start-session --target i-0ae34ad8c164caf53
+'
+alias lbe-connect-wrk4-int='aws --profile OLAFINT \
+    ssm start-session --target i-075642470262bfa73
+'
+alias lbe-connect-wrk5-int='aws --profile OLAFINT \
+    ssm start-session --target i-0460612ad51b767b9
+'
+alias lbe-connect-tunnel-int='ssh \
+    -o ProxyCommand="aws ssm --profile OLAFINT start-session --target %h --document-name AWS-StartSSHSession --parameters portNumber=%p" \
+    ubuntu@i-0c85d102e1efdfc35 \
+    -L 1024:pl-0-eu-central-1.mvtjr.mongodb.net:1024 \
+    -L 1025:pl-0-eu-central-1.mvtjr.mongodb.net:1025 \
+    -L 1026:pl-0-eu-central-1.mvtjr.mongodb.net:1026 \
+'
+
+# PREPROD
+alias lbe-connect-mgr1-preprod='aws --profile OLAFPREPROD \
+    ssm start-session --target i-0e7c3b024f3a3ca9b
+'
+alias lbe-connect-mgr2-preprod='aws --profile OLAFPREPROD \
+    ssm start-session --target i-052e180cea01e1b11
+'
+alias lbe-connect-mgr3-preprod='aws --profile OLAFPREPROD \
+    ssm start-session --target i-0da930bd66daa41c2
+'
+alias lbe-connect-wrk1-preprod='aws --profile OLAFPREPROD \
+    ssm start-session --target i-0c20e93c3a618e554
+'
+alias lbe-connect-wrk2-preprod='aws --profile OLAFPREPROD \
+    ssm start-session --target i-003eeaba45767aa82
+'
+alias lbe-connect-wrk3-preprod='aws --profile OLAFPREPROD \
+    ssm start-session --target i-0dcd337cc0b744612
+'
+alias lbe-connect-wrk4-preprod='aws --profile OLAFPREPROD \
+    ssm start-session --target i-00d9ab5dc956ef317
+'
+alias lbe-connect-wrk5-preprod='aws --profile OLAFPREPROD \
+    ssm start-session --target i-05e84a7b6c273ebb5
+'
+alias lbe-connect-wrk6-preprod='aws --profile OLAFPREPROD \
+    ssm start-session --target i-042b029ba90dc09af
+'
+alias lbe-connect-tunnel-preprod='ssh \
+    -o ProxyCommand="aws ssm --profile OLAFPREPROD start-session --target %h --document-name AWS-StartSSHSession --parameters portNumber=%p" \
+    ubuntu@i-01dad90f814d86177 \
+    -L 1024:pl-0-eu-central-1.tql1o.mongodb.net:1024 \
+    -L 1025:pl-0-eu-central-1.tql1o.mongodb.net:1025 \
+    -L 1026:pl-0-eu-central-1.tql1o.mongodb.net:1026
+'
+
+# PROD
+alias lbe-connect-mgr1-prod='aws --profile OLAFPROD \
+    ssm start-session --target i-050087bf5c8965345
+'
+alias lbe-connect-mgr2-prod='aws --profile OLAFPROD \
+    ssm start-session --target i-0b8c101b265baca75
+'
+alias lbe-connect-mgr3-prod='aws --profile OLAFPROD \
+    ssm start-session --target i-0e7481b7990df4dd5
+'
+alias lbe-connect-wrk1-prod='aws --profile OLAFPROD \
+    ssm start-session --target i-0b30edd72919b8cac
+'
+alias lbe-connect-wrk2-prod='aws --profile OLAFPROD \
+    ssm start-session --target i-00510a52bc2681a4a
+'
+alias lbe-connect-wrk3-prod='aws --profile OLAFPROD \
+    ssm start-session --target i-05b01d4afbd9792b6
+'
+alias lbe-connect-wrk4-prod='aws --profile OLAFPROD \
+    ssm start-session --target i-09c0fc9ebfb6c5b46
+'
+alias lbe-connect-wrk5-prod='aws --profile OLAFPROD \
+    ssm start-session --target i-06309fd3623524825
+'
+alias lbe-connect-wrk7-prod='aws --profile OLAFPROD \
+    ssm start-session --target i-07bd96078e4da79ac
+'
+alias lbe-connect-wrk8-prod='aws --profile OLAFPROD \
+    ssm start-session --target i-009cce20a1d859bf4
+'
+alias lbe-connect-tunnel-prod='ssh \
+    -o ProxyCommand="aws ssm --profile OLAFPROD start-session --target %h --document-name AWS-StartSSHSession --parameters portNumber=%p" \
+    ubuntu@i-08fdca18402c8456f \
+    -L 1024:pl-0-eu-central-1.869io.mongodb.net:1024 \
+    -L 1025:pl-0-eu-central-1.869io.mongodb.net:1025 \
+    -L 1026:pl-0-eu-central-1.869io.mongodb.net:1026
+'
 
 # Functions
 # =========
-
-# Add this for anaconda install.
-if [ -d "${HOME}/.local/share/JetBrains/Toolbox/apps/PyCharm-C/" ]
-then
-    charm() {
-        PYCHARM=$(
-            find "${HOME}/.local/share/JetBrains/Toolbox/apps/PyCharm-C/" \
-              -name pycharm.sh | sort | tail -n 1
-        )
-        ${PYCHARM} ${@}
-    }
-fi
 
 # Remove files starting with `#`; print nothing if no file found.
 function rmh() {
