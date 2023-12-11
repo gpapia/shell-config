@@ -190,7 +190,7 @@ function rmh() {
 }
 
 # Remove files ending with `~`; print nothing if no file found.
-if command -v rmt > /dev/null
+if which rmt &> /dev/null
 then
     alias rmtt=$(which rmt)
 fi
@@ -202,7 +202,7 @@ function rmt() {
             rm "${f}"
         fi
     done
-    if command -v rmt > /dev/null
+    if which rmt &> /dev/null
     then
         echo "For $(which rmt) see 'rmtt' alias."
     fi
